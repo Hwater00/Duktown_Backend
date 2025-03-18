@@ -4,6 +4,7 @@ import com.duktown.domain.post.entity.Post;
 import com.duktown.domain.post.entity.PostRepository;
 import com.duktown.global.type.Category;
 import lombok.RequiredArgsConstructor;
+import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,6 +20,7 @@ public class Post1PageCache {
     private Slice<Post> page1;
     private final PostRepository postRepository;
 
+    @SchedulerLock(name = "cron_lock", lockAtLeastFor = "20s", lockAtMostFor = "50s")
     @Scheduled(cron ="30 * * * * *")
     @Transactional(readOnly = true)
     public void updateCache(){
