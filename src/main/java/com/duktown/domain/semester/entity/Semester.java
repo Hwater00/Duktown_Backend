@@ -36,4 +36,9 @@ public class Semester { //학기
 
     @Column(nullable = false)
     private LocalDate endDate;
+
+    public void setEndDate(LocalDate newEndDate) {
+        this.endDate = newEndDate;
+    }
+
 }

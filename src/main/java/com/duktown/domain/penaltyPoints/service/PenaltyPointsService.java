@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.duktown.global.exception.CustomErrorType.PENALTY_POINT_USER_NOT_SELECTED;
 import static com.duktown.global.exception.CustomErrorType.USER_NOT_FOUND;
 
 @Service
@@ -42,7 +43,7 @@ public class PenaltyPointsService {
     @Transactional
     public void giveRewards(PenaltyPointsDto.BulkRequestDto request) {
         if (request.getUsers().isEmpty()) {
-            throw new IllegalArgumentException("적어도 한 명 이상의 사용자에게 상점을 부여해야 합니다.");
+            throw new CustomException(PENALTY_POINT_USER_NOT_SELECTED);
         }
 
         List<User> users = getUsersByConditions(request.getUsers());
@@ -63,7 +64,7 @@ public class PenaltyPointsService {
     @Transactional
     public void givePenalties(PenaltyPointsDto.BulkRequestDto request) {
         if (request.getUsers().isEmpty()) {
-            throw new IllegalArgumentException("적어도 한 명 이상의 사용자에게 벌점을 부여해야 합니다.");
+           throw new CustomException(PENALTY_POINT_USER_NOT_SELECTED);
         }
 
         List<User> users = getUsersByConditions(request.getUsers());
@@ -88,7 +89,7 @@ public class PenaltyPointsService {
                         condition.getUnitUserId(),
                         condition.getRoomNumber(),
                         condition.getName()
-                ).orElseThrow(() -> new IllegalArgumentException("해당 조건의 사용자를 찾을 수 없습니다. studentId: " + condition.getStudentId())))
+                ).orElseThrow(() -> new CustomException(USER_NOT_FOUND)))
                 .collect(Collectors.toList());
     }
 }

@@ -89,7 +89,11 @@ public enum CustomErrorType {
 
     // cleaning(12xxxx)
     CLEANING_NOT_FOUND(NOT_FOUND,120001,"존재하지 않는 청소입니다."),
-    CLEANING_DATE_NOT_TODAY(BAD_REQUEST, 120002, "청소 담당일 당일에만 청소를 완료할 수 있습니다.");
+    CLEANING_DATE_NOT_TODAY(BAD_REQUEST, 120002, "청소 담당일 당일에만 청소를 완료할 수 있습니다."),
+
+    // PenaltyPoints (13xxxx)
+    PENALTY_POINT_USER_NOT_SELECTED(BAD_REQUEST,130001,"적어도 한 명 이상의 사용자에게 벌점을 부여해야 합니다.");
+
 
     private final HttpStatus httpStatus;
     private final int code;
