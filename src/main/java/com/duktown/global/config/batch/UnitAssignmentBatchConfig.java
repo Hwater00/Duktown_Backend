@@ -102,15 +102,15 @@ public class UnitAssignmentBatchConfig {
         return false; // 만료되지 않은 경우
     }
 
-    // 빈 유닛에 새로운 유저를 배정하는 공통 로직
     private void assignNewUserToUnit(UnitUser unitUser) {
-        Optional<Unit> availableUnit = unitRepository.findAvailableUnit(); // 빈 유닛 조회
-        if (availableUnit.isPresent() && availableUnit.get().getCurrentPeopleCnt() < availableUnit.get().getOccupancy()) {
-            // 유효한 유저를 찾기 위한 로직
-            Optional<User> newUser = unitUserRepository.findNewUserToAssign(); // 유효한 유저 찾기
-            if (newUser.isPresent()) {
-                Unit unit = availableUnit.get(); // 빈 유닛 가져오기
-                User user = newUser.get(); // 새로운 유저 가져오기
+        List<Unit> availableUnits = unitRepository.findAvailableUnits(); // 빈 유닛 리스트 조회
+        List<User> newUsers = unitUserRepository.findNewUsersToAssign(); // 유효한 유저들 찾기
+
+        int userIndex = 0; // 유저 순차 배정을 위한 인덱스
+
+        for (Unit unit : availableUnits) {
+            if (unit.getCurrentPeopleCnt() < unit.getOccupancy() && userIndex < newUsers.size()) {
+                User user = newUsers.get(userIndex); // 유효한 유저 가져오기
 
                 // 유닛 정보 갱신
                 unit.setCurrentPeopleCnt(unit.getCurrentPeopleCnt() + 1); // 유닛에 새로운 유저 배정 시, 현재 인원 수 증가
@@ -122,9 +122,13 @@ public class UnitAssignmentBatchConfig {
 
                 unitUserRepository.save(unitUser); // 새 배정된 유저 저장
                 unitRepository.save(unit); // 유닛 정보도 갱신하여 저장
+
+                userIndex++; // 다음 유저로 이동
             }
         }
     }
+
+
 
     // 처리된 데이터를 데이터베이스에 저장하는 Writer 설정
     @Bean

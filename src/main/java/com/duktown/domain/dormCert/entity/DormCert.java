@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-import static javax.persistence.EnumType.*;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 import static lombok.AccessLevel.PRIVATE;
 import static lombok.AccessLevel.PROTECTED;
@@ -39,12 +38,10 @@ public class DormCert {
     @Column(nullable = false)
     private String studentId;
 
-    @Enumerated(value = STRING)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private HallName hallName;
 
-    @Column(nullable = false)
-    private String unit;
 
     public void setCertified(Boolean certified) {
         this.certified = certified;

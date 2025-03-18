@@ -17,6 +17,7 @@ public interface UnitUserRepository extends JpaRepository<UnitUser,Long> {
     @Query("SELECT u FROM User u WHERE u.deleted = false AND EXISTS (" +
             "SELECT 1 FROM UnitUser uu WHERE uu.user = u AND uu.semester.endDate > CURRENT_DATE) " +
             "ORDER BY u.createdAt ASC")
-    Optional<User> findNewUserToAssign();
+    List<User> findNewUsersToAssign();
+
 
 }

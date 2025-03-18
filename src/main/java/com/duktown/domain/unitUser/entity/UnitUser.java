@@ -46,4 +46,3 @@ public class UnitUser extends BaseTimeEntity {
     @JoinColumn(name = "semester_id", nullable = true)
     private Semester semester; // 학기 연관 추가 (옵션)
 }
-// 그룹

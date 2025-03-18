@@ -48,7 +48,8 @@ public class SecurityConfig {
             "/auth/password/**",
             "/auth/signup",
             "/websocket",
-            "/unit/**"
+            "/unit/**",
+            "/run-batch"
     };
 
     @Value("${custom.cors.originUrl}")
