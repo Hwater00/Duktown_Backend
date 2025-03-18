@@ -20,7 +20,7 @@ import static lombok.AccessLevel.PROTECTED;
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
 @Table(name = "dorm_cert")
-public class DormCert {
+public class DormCert { //기숙사 신청 인증
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "dorm_cert_id")
