@@ -2,6 +2,7 @@ package com.duktown.domain.penaltyPoints.entity;
 
 import com.duktown.domain.BaseTimeEntity;
 import com.duktown.domain.user.entity.User;
+import com.duktown.global.type.PenaltyType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.time.LocalDate;
 
 import static javax.persistence.FetchType.LAZY;
 
-// 벌점
+// 상벌점
 @Getter
 @Entity
 @Builder
@@ -23,10 +24,12 @@ public class PenaltyPoints extends BaseTimeEntity {
     @Id @GeneratedValue
     private Long id;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", nullable = true) //TODO: 배포를 위해 null값 허용 및 initDB설정
+    @JoinColumn(name = "user_id")
     private User user;
     private String reason;
     private int score;
     private LocalDate date;
+    @Enumerated(EnumType.STRING)
+    private PenaltyType penaltyType;
 
 }

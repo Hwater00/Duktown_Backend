@@ -25,4 +25,19 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.roomAssignment = false")
     List<User> findUnassignedUsers();
+
+    @Query("SELECT u FROM User u " +
+            "JOIN DormCert d ON u.id = d.user.id " +
+            "JOIN UnitUser uu ON u.id = uu.user.id " +
+            "JOIN Roommate r ON u MEMBER OF r.users " +  // Roommate의 users 리스트에서 u가 존재하는 경우만 조인
+            "WHERE d.studentId = :studentId " +
+            "AND uu.id = :unitUserId " +
+            "AND r.roomNumber = :roomNumber " +
+            "AND u.name = :name")
+    Optional<User> findUserByConditions(
+            @Param("studentId") String studentId,
+            @Param("unitUserId") Long unitUserId,
+            @Param("roomNumber") Integer roomNumber,
+            @Param("name") String name
+    );
 }
