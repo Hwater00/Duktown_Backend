@@ -68,6 +68,9 @@ dependencies {
     implementation 'net.javacrumbs.shedlock:shedlock-spring:4.44.0'
     implementation 'net.javacrumbs.shedlock:shedlock-provider-redis-spring:4.44.0'
     implementation 'net.javacrumbs.shedlock:shedlock-provider-jdbc-template:4.44.0'
+
+    // spring-batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
 }
 
 tasks.named('test') {

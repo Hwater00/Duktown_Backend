@@ -45,4 +45,8 @@ public class DormCert {
 
     @Column(nullable = false)
     private String unit;
+
+    public void setCertified(Boolean certified) {
+        this.certified = certified;
+    }
 }
