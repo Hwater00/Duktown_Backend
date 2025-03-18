@@ -82,24 +82,51 @@ public class UnitUserAssignmentBatchConfig {
                 if (unitUser.getUnitUserType() == UnitUserType.WAITING) {
                     unitUserRepository.save(unitUser);  // 만료된 유닛유저 DB에 저장
                 } else {
-                    // 유닛유저가 새로 입사했을 때 룸메이트 배정
-                    assignNewRoommatesToUnitUser(unitUser);
+                    // 유닛유저가 새로 입사했을 때
+                    assignRoommatesToUnitUser();
                 }
             }
         };
     }
 
-    private void assignNewRoommatesToUnitUser(UnitUser unitUser) {
-        List<Roommate> availableRoommates = roommateRepository.findByAssignedFalse();  // 배정되지 않은 룸메이트 목록을 가져옵니다
-        if (availableRoommates.size() >= 3) {
-            // 룸메이트 3개를 유닛유저에 배정
-            for (int i = 0; i < 3; i++) {
-                Roommate roommate = availableRoommates.get(i);
-                unitUser.setRoommate(roommate);  // 유닛유저에 룸메이트 배정
-                unitUserRepository.save(unitUser);  // 유닛유저 정보 저장
-                roommate.setAssigned(true);  // 룸메이트 배정 상태 변경
-                roommateRepository.save(roommate);  // 룸메이트 정보 저장
+    private void assignRoommatesToUnitUser() {
+        // 배정되지 않은 룸메이트 목록을 가져옵니다
+        List<Roommate> availableRoommates = roommateRepository.findByAssignedFalse();
+
+        // 유닛을 관리할 현재 유닛 번호 (첫 번째 유닛부터 시작)
+        int currentUnitNumber = 1;
+        int currentUnitUserCount = 0;  // 현재 유닛에 배정된 사람 수 (최대 12명)
+
+        // 새로운 유닛 유저 생성
+        UnitUser unitUser = UnitUser.builder()
+                .unitUserType(UnitUserType.UNIT_MEMBER)
+                .uintNumber(currentUnitNumber)
+                .build();
+
+        for (Roommate roommate : availableRoommates) {
+            // 12명 배정되면 유닛 번호 증가
+            if (currentUnitUserCount == 12) {
+                // 유닛에 12명이 배정되었으면 유닛 번호를 증가시킵니다.
+                currentUnitNumber++;
+                currentUnitUserCount = 0;  // 새로운 유닛을 시작하므로 카운트를 초기화
+
+                // 새로운 유닛을 시작합니다.
+                unitUser = UnitUser.builder()
+                        .unitUserType(UnitUserType.UNIT_MEMBER)
+                        .uintNumber(currentUnitNumber)
+                        .build();
             }
+
+            // 룸메이트 배정 (4명씩 배정)
+            unitUser.setRoommate(roommate);  // 유닛유저에 룸메이트 배정
+            unitUserRepository.save(unitUser);  // 유닛유저 정보 저장
+
+            roommate.setAssigned(true);  // 룸메이트 배정 상태 변경
+            roommateRepository.save(roommate);  // 룸메이트 정보 저장
+
+            currentUnitUserCount += 4;  // 유닛에 4명씩 추가
         }
     }
+
+
 }

@@ -27,8 +27,7 @@ public class UnitUser extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "unit_user_id")
-    private Long id;  // 유닛구분 12명이 1개의 유닛 0~8호 중 0~3호/4~8호
-
+    private Long id;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -38,8 +37,9 @@ public class UnitUser extends BaseTimeEntity {
     private Roommate roommate; // 룸 정보
 
     @Builder.Default
-    private int occupancy = 3; // 수용 유닛
-    private int currentPeopleCnt; // 현재 유닛 갯수
+    private int occupancy = 3; // 방 수 제한(12명 제한)
+    @Builder.Default
+    private  int uintNumber = 1; // 유닛구분 12명이 1개의 유닛 0~8호 중 0~3호/4~8호
 
     @Enumerated(STRING)
     @Column(nullable = false)

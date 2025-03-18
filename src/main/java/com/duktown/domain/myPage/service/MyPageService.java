@@ -1,7 +1,5 @@
 package com.duktown.domain.myPage.service;
 
-import com.duktown.domain.myPage.dto.PenaltyPointsDto;
-import com.duktown.domain.penaltyPoints.entity.PenaltyPoints;
 import com.duktown.domain.penaltyPoints.entity.PenaltyPointsRepository;
 import com.duktown.domain.profile.dto.ProfileDto;
 import com.duktown.domain.roommate.entity.Roommate;
@@ -28,27 +26,6 @@ public class MyPageService {
     private final RoommateRepository roommateRepository;
     private final UnitUserRepository unitUserRepository;
 
-    // 나의 벌점 내역 조회
-    public PenaltyPointsDto.PenaltyPointsListResponseDto getMyPenaltyPoints(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new CustomException(CustomErrorType.USER_NOT_FOUND));
-
-        // (데모버전용 벌점 조회)
-        List<PenaltyPoints> penaltyPoints = penaltyPointsRepository.findAllByOrderByDateDesc();
-
-        //실제 벌점 조회 로직
-        //List<PenaltyPoints> penaltyPoints = penaltyPointsRepository.findPenaltyPointsByUser(user);
-        List<PenaltyPointsDto.PenaltyPointsResponseDto> penaltyPointsResponseDto
-                = penaltyPoints.stream()
-                .map(PenaltyPointsDto.PenaltyPointsResponseDto::new)
-                .collect(Collectors.toList());
-
-        // 총합 벌점을 쿼리문으로 계산하여 반환
-        // 배포용:
-        Long totalPenaltyPointsByUser = penaltyPointsRepository.getTotalPenaltyPoints();
-        //Long totalPenaltyPointsByUser = penaltyPointsRepository.getTotalPenaltyPointsByUser(user);
-        return new PenaltyPointsDto.PenaltyPointsListResponseDto(penaltyPointsResponseDto,totalPenaltyPointsByUser);
-    }
 
     // 나의 유닛 조회
     public ProfileDto.ListResponse getMyUnits(Long userId){

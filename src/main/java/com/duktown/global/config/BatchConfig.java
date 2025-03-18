@@ -22,7 +22,6 @@ public class BatchConfig {
                              RoommateAssignmentBatchConfig roommateAssignmentBatchConfig,
                              UnitUserAssignmentBatchConfig unitUserAssignmentBatchConfig) {
         return jobBuilderFactory.get("sequentialJob")
-                // 첫 번째 배치 작업: dormCertSemesterBatchConfig의 Step 사용
                 .start(dormCertSemesterBatchConfig.dormCertStep(
                         dormCertSemesterBatchConfig.dormCertReader(null),
                         dormCertSemesterBatchConfig.dormCertProcessor(),
