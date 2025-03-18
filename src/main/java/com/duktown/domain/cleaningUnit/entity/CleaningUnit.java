@@ -1,7 +1,6 @@
 package com.duktown.domain.cleaningUnit.entity;
 
 import com.duktown.domain.cleaning.entity.Cleaning;
-import com.duktown.domain.unit.entity.Unit;
 import com.duktown.domain.unitUser.entity.UnitUser;
 import lombok.*;
 

@@ -6,8 +6,8 @@ import com.duktown.domain.chat.entity.ChatRepository;
 import com.duktown.domain.chatRoomUser.entity.ChatRoomUser;
 import com.duktown.domain.chatRoomUser.entity.ChatRoomUserRepository;
 import com.duktown.domain.cleaningUnit.entity.CleaningUnitInitDB;
-import com.duktown.domain.unit.entity.Unit;
-import com.duktown.domain.unit.entity.UnitRepository;
+import com.duktown.domain.roommate.entity.Roommate;
+import com.duktown.domain.roommate.entity.RoommateRepository;
 import com.duktown.domain.emailCert.dto.EmailCertDto;
 import com.duktown.domain.emailCert.entity.EmailCert;
 import com.duktown.domain.emailCert.entity.EmailCertRepository;
@@ -49,7 +49,7 @@ public class UserService {
     private final SimpMessagingTemplate simpMessagingTemplate;
 
     // 데모버전용
-    private final UnitRepository unitRepository;
+    private final RoommateRepository roommateRepository;
     private final UnitUserRepository unitUserRepository;
 
     private final CleaningUnitInitDB cleaningUnitInitDB;
@@ -96,8 +96,8 @@ public class UserService {
         User save = userRepository.save(user);
 
         //TODO: 유닛 배정(데모버전)
-        Unit unit = unitRepository.findFirstByOrderByIdDesc().orElseThrow(() -> new CustomException(UNIT_NOT_FOUND));
-        unitUserRepository.save(UnitUser.builder().user(user).unit(unit).unitUserType(UnitUserType.UNIT_LEADER).build());
+        Roommate roommate = roommateRepository.findFirstByOrderByIdDesc().orElseThrow(() -> new CustomException(UNIT_NOT_FOUND));
+        unitUserRepository.save(UnitUser.builder().user(user).roommate(roommate).unitUserType(UnitUserType.UNIT_LEADER).build());
         //TODO: 청소 배정(데모버전)
         cleaningUnitInitDB.allocationCleaning(save.getId());
 

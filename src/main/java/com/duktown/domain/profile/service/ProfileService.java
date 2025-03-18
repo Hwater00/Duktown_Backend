@@ -45,7 +45,7 @@ public class ProfileService {
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_FOUND));
         UnitUser unitUser = unitUserRepository.findByUserId(userId).orElseThrow(() -> new CustomException(UNIT_USER_NOT_FOUND));
 
-        return ProfileDto.ProfileResponse.from(user, unitUser.getUnit(), unitUser.getUnitUserType());
+        return ProfileDto.ProfileResponse.from(user, unitUser.getRoommate(), unitUser.getUnitUserType());
     }
 
     // 내가 작성한 배달팟 조회

@@ -1,6 +1,6 @@
-package com.duktown.domain.unit.service;
+package com.duktown.domain.roommate.service;
 
-import com.duktown.domain.unit.entity.UnitRepository;
+import com.duktown.domain.roommate.entity.RoommateRepository;
 import com.duktown.domain.unitUser.entity.UnitUserRepository;
 import com.duktown.domain.user.entity.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UnitService {
+public class RoommateService {
 
-    private final UnitRepository unitRepository;
+    private final RoommateRepository roommateRepository;
     private final UserRepository userRepository;
     private final UnitUserRepository unitUserRepository;
 

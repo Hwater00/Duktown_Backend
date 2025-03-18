@@ -1,11 +1,9 @@
 package com.duktown.domain.user.entity;
 
 import com.duktown.domain.BaseTimeEntity;
+import com.duktown.domain.roommate.entity.Roommate;
 import com.duktown.global.type.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
@@ -13,11 +11,13 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 import static javax.persistence.EnumType.*;
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
@@ -53,6 +53,14 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private boolean deleted = false;
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "roommate_id")
+    private Roommate roommate;
+
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean roomAssignment = false;
+
     private LocalDateTime deletedAt;
 
     public void updateRefreshToken(String refreshToken) {
@@ -71,4 +79,9 @@ public class User extends BaseTimeEntity {
         // 외박 가능 일수 다운
         this.availablePeriod -= period;
     }
+
+    public void setRoomAssignment() {
+        this.roomAssignment = true;
+    }
+
 }

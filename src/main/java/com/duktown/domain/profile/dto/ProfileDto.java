@@ -1,6 +1,6 @@
 package com.duktown.domain.profile.dto;
 
-import com.duktown.domain.unit.entity.Unit;
+import com.duktown.domain.roommate.entity.Roommate;
 import com.duktown.domain.unitUser.entity.UnitUser;
 import com.duktown.domain.user.entity.User;
 import com.duktown.global.type.HallName;
@@ -29,13 +29,13 @@ public class ProfileDto {
         private RoleType roleType;
 
         //TODO: 유닛정보 추가
-        public static ProfileResponse from(User user, Unit unit, UnitUserType unitUserType) {
+        public static ProfileResponse from(User user, Roommate roommate, UnitUserType unitUserType) {
             return ProfileResponse.builder()
                     .name(user.getName())
                     .email(user.getEmail())
-                    .hallName(unit.getHallName())
-                    .buildingNumber(unit.getBuildingNumber())
-                    .roomNumber(unit.getRoomNumber())
+                    .hallName(roommate.getHallName())
+                    .buildingNumber(roommate.getBuildingNumber())
+                    .roomNumber(roommate.getRoomNumber())
                     .unitUserType(unitUserType)
                     .roleType(user.getRoleType())
                     .build();

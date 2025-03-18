@@ -1,6 +1,7 @@
-package com.duktown.domain.unit.entity;
+package com.duktown.domain.roommate.entity;
 
 import com.duktown.domain.unitUser.entity.UnitUser;
+import com.duktown.domain.user.entity.User;
 import com.duktown.global.type.HallName;
 import lombok.*;
 
@@ -18,10 +19,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Unit { //roomNumber 배정
+public class Roommate { //roomNumber 배정
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "unit_id")
+    @Column(name = "roommate_id")
     private Long id;
 
     @Enumerated(value = STRING)
@@ -42,17 +43,29 @@ public class Unit { //roomNumber 배정
 
     private int currentPeopleCnt; // 현재 인원
 
+    @OneToMany(fetch = LAZY, mappedBy = "roommate", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<User> users = new ArrayList<>();
+
     @Builder.Default
-    @OneToMany(fetch = LAZY, mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = LAZY, mappedBy = "roommate", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UnitUser> unitUsers = new ArrayList<>(); // 같은 유닛 인원
+
+    @Builder.Default
+    private boolean assigned = false;  // 배정된 상태를 나타내는 필드 추가
+
+    public void assignRoommate() {
+        this.assigned = true;  // 배정되었을 때 호출
+    }
 
     public boolean isFull() {
         return currentPeopleCnt >= occupancy;
     }
 
-    public void addUser() {
+    public void addUser(User assignedUser) {
         if (!isFull()) {
             currentPeopleCnt++;
+            assignedUser.setRoommate(this);  // 유저에게 룸메이트 배정
+            users.add(assignedUser);  // 유저를 룸메이트에 추가
         }
     }
 
