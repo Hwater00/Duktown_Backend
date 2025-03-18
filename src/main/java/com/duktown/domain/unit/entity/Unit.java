@@ -1,8 +1,10 @@
 package com.duktown.domain.unit.entity;
 
+import com.duktown.domain.semester.entity.Semester;
 import com.duktown.domain.unitUser.entity.UnitUser;
 import com.duktown.domain.user.entity.User;
 import com.duktown.global.type.HallName;
+import com.duktown.global.type.UnitUserType;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,16 +50,27 @@ public class Unit {
     @OneToMany(fetch = LAZY, mappedBy = "unit", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UnitUser> unitUsers = new ArrayList<>(); // 같은 유닛 인원
 
-    public int assignUnitUser() {
-        if (currentPeopleCnt <= 1) {
-            currentPeopleCnt++;
+    /**
+     * 유닛에 새로운 유저를 배정하는 메소드
+     *
+     * @param user 배정할 유저
+     * @param unitUserType 유저의 타입 (UNIT_LEADER, UNIT_MEMBER 등)
+     * @param semester 배정된 학기
+     * @return 배정된 유저
+     */
+    public UnitUser assignUnitUser(User user, UnitUserType unitUserType, Semester semester) {
+        if (currentPeopleCnt < occupancy) { // 빈 자리가 있을 경우
+            UnitUser unitUser = UnitUser.builder()
+                    .user(user)
+                    .unit(this)
+                    .unitUserType(unitUserType)
+                    .semester(semester)
+                    .build();
+            this.unitUsers.add(unitUser); // 유닛에 유저 추가
+            currentPeopleCnt++; // 현재 인원 수 증가
+            return unitUser; // 배정된 유저 반환
         }
-        return currentPeopleCnt;
+        return null; // 빈 자리가 없으면 null 반환
     }
 
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "unit_user_id", nullable = true)
-//    private UnitUser unitUser; // 1개의 Unit 1개의 UnitUser에 속함
 }
-// 방 생성

@@ -1,13 +1,11 @@
 package com.duktown.domain.unitUser.entity;
 
 import com.duktown.domain.BaseTimeEntity;
+import com.duktown.domain.semester.entity.Semester;
 import com.duktown.domain.unit.entity.Unit;
 import com.duktown.domain.user.entity.User;
 import com.duktown.global.type.UnitUserType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,6 +17,7 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor(access = PRIVATE)
 @NoArgsConstructor(access = PROTECTED)
@@ -42,5 +41,9 @@ public class UnitUser extends BaseTimeEntity {
     private UnitUserType unitUserType;
 
     private Integer unitNumber; // 유닛구분 12명이 1개의 유닛 0~8호 중 0~3호/4~8호
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "semester_id", nullable = true)
+    private Semester semester; // 학기 연관 추가 (옵션)
 }
 // 그룹
